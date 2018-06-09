@@ -37,7 +37,7 @@
                     unit unit
                     :color (color head))))
 
-(defmethod move-snake ((snake snake ))
+(defmethod move-snake ((snake snake))
   (let ((direction (direction snake))
         (head-x (x-pos (head snake)))
         (head-y (y-pos (head snake))))
@@ -66,6 +66,26 @@
   (sdl:clear-display sdl:*black*)
   (draw-snake *snake*))
 
+(defun handle-input ()
+  ;; quit on escape
+  (when (sdl:key-down-p :sdl-key-escape) (sdl:push-quit-event))
+
+  ;; move down
+  (when (and (not (eq (direction *snake*) :up)) (sdl:key-down-p :sdl-key-s))
+    (setf (direction *snake*) :down))
+
+  ;; move up
+  (when (and (not (eq (direction *snake*) :down)) (sdl:key-down-p :sdl-key-w))
+    (setf (direction *snake*) :up))
+
+  ;; move left
+  (when (and (not (eq (direction *snake*) :right)) (sdl:key-down-p :sdl-key-a))
+    (setf (direction *snake*) :left))
+
+  ;; move right
+  (when (and (not (eq (direction *snake*) :left)) (sdl:key-down-p :sdl-key-d))
+    (setf (direction *snake*) :right)))
+
 (defun start-game ()
   (sdl:with-init ()
     (sdl:window 640 480 :title-caption "SCHOOP")
@@ -73,12 +93,7 @@
     (sdl:with-events ()
       (:quit-event () t)
 
-      (:key-down-event ()
-                       (when (sdl:key-down-p :sdl-key-escape) (sdl:push-quit-event))
-                       (when (sdl:key-down-p :sdl-key-s) (setf (direction *snake*) :down))
-                       (when (sdl:key-down-p :sdl-key-a) (setf (direction *snake*) :left))
-                       (when (sdl:key-down-p :sdl-key-w) (setf (direction *snake*) :up))
-                       (when (sdl:key-down-p :sdl-key-d) (setf (direction *snake*) :right)))
+      (:key-down-event () (handle-input))
 
       (:idle ()
         (update)
