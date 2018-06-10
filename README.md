@@ -1,9 +1,8 @@
 # schoop
-### _Your Name <your.name@example.com>_
 
-This is a project to do ... something.
+SNAKE in common lisp!
 
 ## License
 
-Specify license here
+Do what ever you want with this.
 
