@@ -86,6 +86,8 @@
 
 (defparameter *just-ate-apple* NIL)
 
+(defparameter *movements-per-second* 10)
+
 ;;; ------------------------------------------------------------------------------------------------
 ;;; FUNCTIONS --------------------------------------------------------------------------------------
 
@@ -142,7 +144,9 @@
   (let ((current-time (get-internal-real-time)))
     (if (< current-time *current-time-delta*)
         (return-from update)
-        (setf *current-time-delta* (+ 100 current-time))))
+        (setf *current-time-delta* (+ (/ internal-time-units-per-second
+                                         *movements-per-second*)
+                                      current-time))))
 
   (move-snake *snake*)
 
